@@ -13,7 +13,7 @@ use Omnipay\Common\AbstractGateway;
 'refundApplicationFee' => false,
 ]);
  */
-class OrangepayGateway extends AbstractGateway
+class Gateway extends AbstractGateway
 {
     public function getName()
     {
