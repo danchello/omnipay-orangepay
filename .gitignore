@@ -10,7 +10,7 @@ composer.phar
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# User-specific stuff
+# User-specific stuffgit config --global core.autocrlf input
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/dictionaries

@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Skeleton\Message;
+namespace Omnipay\Orangepay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
@@ -18,14 +18,21 @@ class Response extends AbstractResponse
 
     public function isSuccessful()
     {
-        return isset($this->data['success']);
+        return isset($this->data['data']['charge']['attributes']['status'])
+            && $this->data['data']['charge']['attributes']['status'] == "successful";
     }
 
     public function getTransactionReference()
     {
-        if (isset($this->data['reference'])) {
-            return $this->data['reference'];
+        if (isset($this->data['data']['charge']['id'])) {
+            return $this->data['data']['charge']['id'];
         }
     }
 
+    public function getRedirectUrl()
+    {
+        if (isset($this->data['data']['links']['redirect_uri'])) {
+            return $this->data['data']['links']['redirect_uri'];
+        }
+    }
 }

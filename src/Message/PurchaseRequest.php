@@ -1,17 +1,30 @@
 <?php
 namespace Omnipay\Orangepay\Message;
+
 /**
- * Authorize Request
+ * Purchase Request
  *
  * @method Response send()
  */
-class AuthorizeRequest extends AbstractRequest
+class PurchaseRequest extends AbstractRequest
 {
     public function getData()
     {
-        $this->validate('amount', 'card');
-        $this->getCard()->validate();
+        $this->validate('amount');
         $data = $this->getBaseData();
+
+        $data['reference_id'] = $this->getTransactionId();
+        $data['amount'] =  $this->getAmount();
+
+
+        //return_success_url
+        //return_error_url
+        //callback_url
+        //$data['LANDINGPAGE'] = $this->getLandingPage();
+        //$data['RETURNURL'] = $this->getReturnUrl();
+       // $data['CANCELURL'] = $this->getCancelUrl();
+
+
         return $data;
     }
 }

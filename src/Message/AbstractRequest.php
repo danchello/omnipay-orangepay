@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Skeleton\Message;
+namespace Omnipay\Orangepay\Message;
 
 use Omnipay\Common\Message\AbstractRequest as BaseAbstractRequest;
 
@@ -10,8 +10,7 @@ use Omnipay\Common\Message\AbstractRequest as BaseAbstractRequest;
  */
 abstract class AbstractRequest extends BaseAbstractRequest
 {
-    protected $liveEndpoint = 'https://api.example.com';
-    protected $testEndpoint = 'https://api-test.example.com';
+    const CHARGE_ENDPOINT = "https://o-payments.com/api/charges";
 
     public function getKey()
     {
@@ -25,8 +24,11 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
     public function sendData($data)
     {
-        $url = $this->getEndpoint().'?'.http_build_query($data, '', '&');
-        $response = $this->httpClient->get($url);
+        $response = $this->httpClient->post($this->getEndpoint(), [
+            'Authorization: Bearer ' . $this->getApiKey(),
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ]);
 
         $data = json_decode($response->getBody(), true);
 
@@ -36,19 +38,27 @@ abstract class AbstractRequest extends BaseAbstractRequest
     protected function getBaseData()
     {
         return [
-            'transaction_id' => $this->getTransactionId(),
-            'expire_date' => $this->getCard()->getExpiryDate('mY'),
-            'start_date' => $this->getCard()->getStartDate('mY'),
+            'currency'     => 'EUR',
+            'pay_method'   => 'card',
+            'description'  => 'The Great Modernists ticket purchase',
+            'email'        => 'info@modernists.lv',
+            //'language' => '',
         ];
     }
 
-    protected function getEndpoint()
+    public function getMessage()
     {
-        return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
+        return isset($this->data['data']['charge']['attributes']['failure']) ?
+            $this->data['data']['charge']['attributes']['failure'] : null;
     }
 
     protected function createResponse($data)
     {
         return $this->response = new Response($this, $data);
+    }
+
+    public function getEndpoint()
+    {
+        return self::CHARGE_ENDPOINT; //$this->getApiUrl();
     }
 }

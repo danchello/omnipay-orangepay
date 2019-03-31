@@ -1,11 +1,11 @@
 {
-    "name": "Danchello/omnipay-orangepay",
+    "name": "danchello/omnipay-orangepay",
     "description": "Omnipay implementation of orangepay gateway",
     "keywords": [
         "omnipay",
         "orangepay"
     ],
-    "homepage": "https://github.com/Danchello/omnipay-orangepay",
+    "homepage": "https://github.com/danchello/omnipay-orangepay",
     "license": "MIT",
     "authors": [
         {
