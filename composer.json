@@ -1,6 +1,6 @@
 {
     "name": "danchello/omnipay-orangepay",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Omnipay implementation of orangepay gateway",
     "keywords": [
         "omnipay",
