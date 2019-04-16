@@ -45,31 +45,31 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
     public function sendData($data)
     {
-       $headers = [
-           'Authorization' => 'Bearer ' .$this->getApiKey(),
-           'Content-Type' => 'application/json',
-           'Accept' => 'application/json'
-       ];
+        $headers = [
+            'Authorization' => 'Bearer ' .$this->getApiKey(),
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ];
 
-       $response = $this->httpClient->request(
+        $response = $this->httpClient->request(
             'POST',
             $this->getEndpoint(),
             $headers,
             json_encode($data)
-       );
+        );
 
-     /*   $client = new \GuzzleHttp\Client(['base_uri' => 'https://o-payments.com/']);
+        /*   $client = new \GuzzleHttp\Client(['base_uri' => 'https://o-payments.com/']);
 
-        $request = new Request('POST', '/api/charges', [
-            'Authorization' => 'Bearer ' .$this->getApiKey(),
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
-        ], json_encode($data));
+           $request = new Request('POST', '/api/charges', [
+               'Authorization' => 'Bearer ' .$this->getApiKey(),
+               'Content-Type' => 'application/json',
+               'Accept' => 'application/json'
+           ], json_encode($data));
 
-        $response = $client->send($request, ['debug' => true, 'headers' => $headers]);
+           $response = $client->send($request, ['debug' => true, 'headers' => $headers]);
 
-        echo json_encode($data);
-        die;*/
+           echo json_encode($data);
+           die;*/
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -85,8 +85,8 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
     public function getMessage()
     {
-         isset($this->data['data']['charge']['attributes']['failure']) ?
-             $this->data['data']['charge']['attributes']['failure'] : null;
+        isset($this->data['data']['charge']['attributes']['failure']) ?
+            $this->data['data']['charge']['attributes']['failure'] : null;
     }
 
     protected function createResponse($data)

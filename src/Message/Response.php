@@ -43,7 +43,8 @@ class Response extends AbstractResponse
         }
     }
     
-    public function getMessage(){
+    public function getMessage()
+    {
         if (isset($this->data['error'])) {
             return $this->data['error'];
         }
