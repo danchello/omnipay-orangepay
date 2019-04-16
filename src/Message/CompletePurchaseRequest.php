@@ -23,26 +23,11 @@ class CompletePurchaseRequest extends AbstractRequest
             'Accept' => 'application/json'
         ];
 
-        var_dump($data);
-
         $response = $this->httpClient->request(
             'GET',
             $this->getEndpoint()."/".$data['charge_id'],
             $headers
         );
-
-        /*   $client = new \GuzzleHttp\Client(['base_uri' => 'https://o-payments.com/']);
-
-           $request = new Request('POST', '/api/charges', [
-               'Authorization' => 'Bearer ' .$this->getApiKey(),
-               'Content-Type' => 'application/json',
-               'Accept' => 'application/json'
-           ], json_encode($data));
-
-           $response = $client->send($request, ['debug' => true, 'headers' => $headers]);
-
-           echo json_encode($data);
-           die;*/
 
         $data = json_decode($response->getBody()->getContents(), true);
 
