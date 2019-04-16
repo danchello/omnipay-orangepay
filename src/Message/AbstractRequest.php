@@ -2,6 +2,7 @@
 
 namespace Omnipay\Orangepay\Message;
 
+use GuzzleHttp\Psr7\Request;
 use Omnipay\Common\Message\AbstractRequest as BaseAbstractRequest;
 
 /**
@@ -12,25 +13,65 @@ abstract class AbstractRequest extends BaseAbstractRequest
 {
     const CHARGE_ENDPOINT = "https://o-payments.com/api/charges";
 
-    public function getKey()
+    public function getApiKey()
     {
-        return $this->getParameter('key');
+        return $this->getParameter('apiKey');
     }
 
-    public function setKey($value)
+    public function setApiKey($value)
     {
-        return $this->setParameter('key', $value);
+        return $this->setParameter('apiKey', $value);
+    }
+
+    public function getApiUrl()
+    {
+        return $this->getParameter('apiUrl');
+    }
+
+    public function setApiUrl($value)
+    {
+        return $this->setParameter('apiUrl', $value);
+    }
+
+    public function getChargeId()
+    {
+        return $this->getParameter('chargeId');
+    }
+
+    public function setChargeId($value)
+    {
+        return $this->setParameter('chargeId', $value);
     }
 
     public function sendData($data)
     {
-        $response = $this->httpClient->post($this->getEndpoint(), [
-            'Authorization: Bearer ' . $this->getApiKey(),
-            'Content-Type: application/json',
-            'Accept: application/json'
-        ]);
+       $headers = [
+           'Authorization' => 'Bearer ' .$this->getApiKey(),
+           'Content-Type' => 'application/json',
+           'Accept' => 'application/json'
+       ];
 
-        $data = json_decode($response->getBody(), true);
+       $response = $this->httpClient->request(
+            'POST',
+            $this->getEndpoint(),
+            $headers,
+            json_encode($data)
+       );
+
+     /*   $client = new \GuzzleHttp\Client(['base_uri' => 'https://o-payments.com/']);
+
+        $request = new Request('POST', '/api/charges', [
+            'Authorization' => 'Bearer ' .$this->getApiKey(),
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ], json_encode($data));
+
+        $response = $client->send($request, ['debug' => true, 'headers' => $headers]);
+
+        echo json_encode($data);
+        die;*/
+
+        $data = json_decode($response->getBody()->getContents(), true);
 
         return $this->createResponse($data);
     }
@@ -38,18 +79,14 @@ abstract class AbstractRequest extends BaseAbstractRequest
     protected function getBaseData()
     {
         return [
-            'currency'     => 'EUR',
-            'pay_method'   => 'card',
-            'description'  => 'The Great Modernists ticket purchase',
-            'email'        => 'info@modernists.lv',
-            //'language' => '',
+            'language' => app()->getLocale(),
         ];
     }
 
     public function getMessage()
     {
-        return isset($this->data['data']['charge']['attributes']['failure']) ?
-            $this->data['data']['charge']['attributes']['failure'] : null;
+         isset($this->data['data']['charge']['attributes']['failure']) ?
+             $this->data['data']['charge']['attributes']['failure'] : null;
     }
 
     protected function createResponse($data)
@@ -59,6 +96,6 @@ abstract class AbstractRequest extends BaseAbstractRequest
 
     public function getEndpoint()
     {
-        return self::CHARGE_ENDPOINT; //$this->getApiUrl();
+        return $this->getApiUrl();
     }
 }

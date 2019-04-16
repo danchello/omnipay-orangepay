@@ -25,6 +25,7 @@ class Gateway extends AbstractGateway
         return array(
             'apiKey' => '',
             'apiUrl' => '',
+            'testMode' => false
         );
     }
 
@@ -62,6 +63,11 @@ class Gateway extends AbstractGateway
      */
     public function purchase(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Stripe\Message\PurchaseRequest', $parameters);
+        return $this->createRequest('\Omnipay\Orangepay\Message\PurchaseRequest', $parameters);
+    }
+
+    public function completePurchase(array $options = array())
+    {
+        return $this->createRequest('\Omnipay\Orangepay\Message\CompletePurchaseRequest', $options);
     }
 }

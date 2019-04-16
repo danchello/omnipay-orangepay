@@ -2,6 +2,7 @@
 
 namespace Omnipay\Orangepay\Message;
 
+use GuzzleHttp\Client;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
 
@@ -22,6 +23,12 @@ class Response extends AbstractResponse
             && $this->data['data']['charge']['attributes']['status'] == "successful";
     }
 
+    public function isRedirect()
+    {
+        return isset($this->data['data']['links']['redirect_uri']);
+    }
+
+
     public function getTransactionReference()
     {
         if (isset($this->data['data']['charge']['id'])) {
@@ -33,6 +40,12 @@ class Response extends AbstractResponse
     {
         if (isset($this->data['data']['links']['redirect_uri'])) {
             return $this->data['data']['links']['redirect_uri'];
+        }
+    }
+    
+    public function getMessage(){
+        if (isset($this->data['error'])) {
+            return $this->data['error'];
         }
     }
 }

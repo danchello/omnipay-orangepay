@@ -10,20 +10,29 @@ class PurchaseRequest extends AbstractRequest
 {
     public function getData()
     {
+        $this->setTestMode(true);
+
         $this->validate('amount');
         $data = $this->getBaseData();
 
-        $data['reference_id'] = $this->getTransactionId();
+        //$data['reference_id'] = $this->getTransactionId();
         $data['amount'] =  $this->getAmount();
+        $data['return_error_url'] = $this->getCancelUrl();
+        $data['return_success_url'] = $this->getReturnUrl();
 
+        return $data;
+    }
 
-        //return_success_url
-        //return_error_url
-        //callback_url
-        //$data['LANDINGPAGE'] = $this->getLandingPage();
-        //$data['RETURNURL'] = $this->getReturnUrl();
-       // $data['CANCELURL'] = $this->getCancelUrl();
+    public function getBaseData()
+    {
+        $data = parent::getBaseData();
 
+        $data = $data + [
+                'currency'     => 'EUR',
+                'pay_method'   => 'card',
+                'description'  => 'The Great Modernists ticket purchase',
+                'email'        => 'info@modernists.lv'
+            ];
 
         return $data;
     }
